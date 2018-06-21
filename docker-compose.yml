@@ -1,0 +1,35 @@
+version: "3.4"
+services:
+ 
+  wordpress:
+    image: nandutee/wpcli-git
+    volumes:
+      - ./www/:/var/www/html
+    ports:
+      - "80:80"
+    links:
+      - mysql:mysql
+    environment:
+      WORDPRESS_DB_PASSWORD: rootpassword
+  mysql:
+    image: mariadb
+    ports:
+      - "8081:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./www/db:/var/lib/mysql
+    restart: always
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8082:80"
+    links:
+      - mysql:db
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    links :
+      - mysql:mysql
+    restart: always    
